@@ -29,7 +29,7 @@ BOOL UuidDeobfuscation(IN CHAR* UuidArray[], IN SIZE_T NmbrOfElements, OUT PBYTE
 	fnUuidFromStringA pUuidFromStringA = (fnUuidFromStringA)GetProcAddress(LoadLibrary(TEXT("RPCRT4")), "UuidFromStringA");
 	if (pUuidFromStringA == NULL) {
 		printf("%s GetProcAddress Failed With Error : %ld\n", e, GetLastError());
-		return EXIT_FAILURE;
+		return FALSE;
 	}
 
 	// Get the real size of the shellcode which is the number of UUID strings * 16
@@ -41,7 +41,7 @@ BOOL UuidDeobfuscation(IN CHAR* UuidArray[], IN SIZE_T NmbrOfElements, OUT PBYTE
 	pBuffer = (PBYTE)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sBuffSize);
 	if (pBuffer == NULL) {
 		printf("%s HeapAlloc Failed With Error : %ld\n", e, GetLastError());
-		return EXIT_FAILURE;
+		return FALSE;
 	}
 
 	// Set TmpBuffer equal to pBuffer 
@@ -57,7 +57,7 @@ BOOL UuidDeobfuscation(IN CHAR* UuidArray[], IN SIZE_T NmbrOfElements, OUT PBYTE
 		if ((STATUS = pUuidFromStringA((RPC_CSTR)UuidArray[i], (UUID*)TmpBuffer)) != RPC_S_OK) {
 			// If the deobfuscation process failed
 			printf("%s UuidFromStringA Failed at [%s] With Error 0x%0.8X", e, UuidArray[i], STATUS);
-			return EXIT_FAILURE;
+			return FALSE;
 		}
 
 		// 16 bytes are written to TmpBuffer at a time
@@ -74,8 +74,35 @@ BOOL UuidDeobfuscation(IN CHAR* UuidArray[], IN SIZE_T NmbrOfElements, OUT PBYTE
 
 }
 
+char* UuidArray[] = { "E48348FC-E8F0-00C0-0000-415141505251" };
+
+#define NumberOfElements 1
+
 
 int main(void) {
+
+	PBYTE ppDAddress = NULL;
+	SIZE_T pDSize = NULL;
+
+	if (!UuidDeobfuscation(UuidArray, NumberOfElements, &ppDAddress, &pDSize)) {
+		printf("%s UuidDeobfuscation Failed to Deobfsucate Bytes\n", e);
+		return -1;
+	}
+
+	printf("%s Deobfuscated Bytes at 0x%p of Size %ld ::: \n", k, ppDAddress, pDSize);
+	for (size_t i = 0; i < pDSize; i++) {
+		if (i % 16 == 0) {
+			printf("\n\t");
+		}
+
+		printf("%0.2X", ppDAddress[i]);
+	}
+	
+
+	printf("Press <Enter> To Quit\n");
+	getchar();
+	
+
 
 	return 0;
 }

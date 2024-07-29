@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{ba8d24be-5c0c-4631-8556-231d728e5ed9}</ProjectGuid>
-    <RootNamespace>UUIDfuscation</RootNamespace>
+    <ProjectGuid>{ff662852-7746-418a-b353-2b9f20c7011f}</ProjectGuid>
+    <RootNamespace>UUIDdeobfuscation</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="UUIDfuscation.c" />
+    <ClCompile Include="..\UUIDdeobfus.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
