@@ -97,6 +97,8 @@ int main(void) {
 
 		printf("%0.2X", ppDAddress[i]);
 	}
+
+	HeapFree(GetProcessHeap(), 0, ppDAddress);
 	
 
 	printf("Press <Enter> To Quit\n");
