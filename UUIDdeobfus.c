@@ -47,11 +47,29 @@ BOOL UuidDeobfuscation(IN CHAR* UuidArray[], IN SIZE_T NmbrOfElements, OUT PBYTE
 	// Set TmpBuffer equal to pBuffer 
 	TmpBuffer = pBuffer;
 
+
 	// Loop through all the UUID strings in the UuidArray[]
 	for (int i = 0; i < NmbrOfElements; i++) {
 
 		// Deobfuscate one UUID string at a time
+		// UuidArray[i] is a single UUID string from the UuidArray[]
+
+		if ((STATUS = pUuidFromStringA((RPC_CSTR)UuidArray[i], (UUID*)TmpBuffer)) != RPC_S_OK) {
+			// If the deobfuscation process failed
+			printf("%s UuidFromStringA Failed at [%s] With Error 0x%0.8X", e, UuidArray[i], STATUS);
+			return EXIT_FAILURE;
+		}
+
+		// 16 bytes are written to TmpBuffer at a time
+		// TmpBuffer will be incremented by 16 to store the upcoming 16 bytes that will be stored onto it;
+		TmpBuffer = (PBYTE)(TmpBuffer + 16);
 	}
+
+	*ppDAddress = pBuffer;
+	*pDSize = sBuffSize;
+
+	return TRUE;   // or return EXIT_SUCCESS, I don't really care, I use both naming conventions >:DD
+
 
 
 }
