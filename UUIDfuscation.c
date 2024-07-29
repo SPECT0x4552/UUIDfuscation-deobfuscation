@@ -49,10 +49,36 @@ BOOL GenerateUuidOutput(unsigned char* pShellcode, SIZE_T ShellcodeSize) {
 	int c = 16, counter = 0; 
 	char* UUID = NULL;
 
-	if (c == 16) {
-		counter++;
+	for (int i = 0; i < ShellcodeSize; i++) {
+		if (c == 16) {
+			counter++;
+
+			UUID = GenerateUUid(pShellcode[i], pShellcode[i + 1], pShellcode[i + 2], pShellcode[i + 3], pShellcode[i + 4], pShellcode[i + 5], pShellcode[i + 6],
+				pShellcode[i + 7], pShellcode[i + 8], pShellcode[i + 9], pShellcode[i + 10], pShellcode[i + 11], pShellcode[i + 12],
+				pShellcode[i + 13], pShellcode[i + 14], pShellcode[i + 15]);
+
+			if (i == ShellcodeSize - 16) {
+
+				// This prints out the last UUID string since the total bytes we have are i+15
+				printf("\"%s\"", UUID);
+			}
+			else {
+				printf("\"%s\"", UUID);
+			}
+			c = 1;
+
+			// Beautify the output of the console
+			if (counter % 3 == 0) {
+				printf("\n\t");
+			}
+
+			c++;
+		}
 	}
 
+
+	printf("\n}\n\t");
+	return TRUE;
 }
 
 
